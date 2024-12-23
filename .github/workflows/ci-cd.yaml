@@ -25,9 +25,12 @@ jobs:
         docker build -t lab9microservices.azurecr.io/payment-service:latest .
         docker push lab9microservices.azurecr.io/payment-service:latest
 
+    - name: Set up KUBECONFIG
+      run: |
+        echo "${{ secrets.KUBECONFIG }}" > kubeconfig.yaml
+        export KUBECONFIG=kubeconfig.yaml
+
     - name: Apply Kubernetes manifests
-      env:
-        KUBECONFIG: ${{ secrets.KUBECONFIG }}
       run: |
         kubectl apply -f deployment.yaml
         kubectl apply -f service.yaml
